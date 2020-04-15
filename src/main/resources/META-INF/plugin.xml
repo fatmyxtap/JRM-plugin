@@ -16,7 +16,11 @@
         <!-- Add your extensions here -->
     </extensions>
 
+    <!-- Actions -->
     <actions>
-        <!-- Add your actions here -->
+        <action id="JRMPlugin.MainAction" class="com.jrmplugin.action.MainAction" text="JRM Application"
+                description="Java Road Map Application" icon="/icons/java-icon-small.png">
+            <add-to-group group-id="MainToolBar" relative-to-action="RunAnything" anchor="before"/>
+        </action>
     </actions>
 </idea-plugin>
