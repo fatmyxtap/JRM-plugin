@@ -7,14 +7,19 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.UUID;
 
 public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
 
     private JPanel panel;
 
     private EditorTextField taskIdField;
-    private PluginModalWindowButton fetchTaskButton;
+    private Component fetchTaskButton;
     private Component completeTaskButton;
+
+    private final String defaultTaskIdFieldText = "Put task id here...";
+    private final String defaultFetchTaskButtonText = "Fetch Task From Server";
+    private final String defaultCompleteTaskButtonText = "Complete task";
 
     public PluginMainPopupWindow(JPanel panel) {
         super(panel, null);
@@ -32,9 +37,9 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
     public JBPopup createPopup() {
         JBPopup popup = super.createPopup();
 
-        this.taskIdField = new EditorTextField("Put task id here...");
-        this.fetchTaskButton = new PluginModalWindowButton("Fetch Task From Server");
-        this.completeTaskButton = new PluginModalWindowButton("Complete task");
+        this.taskIdField = new EditorTextField(defaultTaskIdFieldText);
+        this.fetchTaskButton = new PluginModalWindowButton(defaultFetchTaskButtonText);
+        this.completeTaskButton = new PluginModalWindowButton(defaultCompleteTaskButtonText);
 
         panel.add(taskIdField, BorderLayout.PAGE_START);
         panel.add(fetchTaskButton, BorderLayout.CENTER);
@@ -53,7 +58,24 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
         return taskIdField;
     }
 
-    public PluginModalWindowButton getFetchTaskButton() {
+    public String getTaskId() {
+        String text = taskIdField.getText();
+
+        if (defaultTaskIdFieldText.equals(text)) {
+            return null;
+        }
+
+        try {
+            // just to check that the value is right uuid
+            UUID.fromString(text);
+        } catch (IllegalArgumentException ex) {
+            return null;
+        }
+
+        return text;
+    }
+
+    public Component getFetchTaskButton() {
         return fetchTaskButton;
     }
 

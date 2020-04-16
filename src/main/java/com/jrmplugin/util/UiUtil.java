@@ -1,4 +1,4 @@
-package com.jrmplugin.ui.util;
+package com.jrmplugin.util;
 
 import javax.swing.*;
 import java.awt.*;
