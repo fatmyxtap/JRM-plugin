@@ -3,11 +3,14 @@ package com.jrmplugin.action;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.ui.popup.JBPopup;
+import com.intellij.ui.EditorTextField;
+import com.jrmplugin.core.HttpDownloadUtil;
 import com.jrmplugin.core.UnpackCurrentTask;
 import com.jrmplugin.ui.PluginMainPopupWindow;
 import com.jrmplugin.ui.util.UiUtil;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
 
 public class MainAction extends AnAction {
 
@@ -19,10 +22,34 @@ public class MainAction extends AnAction {
 
         // all logic here
 
-        JBPopup popup = new PluginMainPopupWindow(UiUtil.createJPanel()).createPopup();
-        popup.showInBestPositionFor(e.getDataContext());
+        PluginMainPopupWindow pluginMainPopupWindow = new PluginMainPopupWindow(UiUtil.createJPanel());
+        pluginMainPopupWindow.createPopup().showInBestPositionFor(e.getDataContext());
 
-        new UnpackCurrentTask(e, "/home/myxtap/Projects/java/mock-project.zip");
+        String hostUrl = "http://localhost:8081/tasks/";
+
+        pluginMainPopupWindow
+                .getFetchTaskButton()
+                .addActionListener((actionEvent) -> {
+                    EditorTextField taskIdField = pluginMainPopupWindow.getTaskIdField();
+
+                    try {
+                        // just to check that the value is right uuid
+                        UUID.fromString(taskIdField.getText());
+                    } catch (IllegalArgumentException ex) {
+                        // don't do anything because task id incorrect
+                    }
+
+                    // make call to server for download a task
+                    String archiveFileLocation
+                            = HttpDownloadUtil.downloadFile(e, hostUrl + taskIdField.getText());
+
+                    if (archiveFileLocation == null) {
+                        // don't find file
+                        throw new IllegalArgumentException("Incorrect TASK ID!!");
+                    }
+
+                    new UnpackCurrentTask(e, archiveFileLocation);
+                });
     }
 
     @Override

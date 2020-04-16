@@ -12,6 +12,10 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
 
     private JPanel panel;
 
+    private EditorTextField taskIdField;
+    private PluginModalWindowButton fetchTaskButton;
+    private Component completeTaskButton;
+
     public PluginMainPopupWindow(JPanel panel) {
         super(panel, null);
         this.panel = panel;
@@ -28,17 +32,32 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
     public JBPopup createPopup() {
         JBPopup popup = super.createPopup();
 
-        EditorTextField taskIdField = new EditorTextField("Put task id here...");
-        Component fetchTask = new PluginModalWindowButton("Fetch Task From Server");
-        Component completeTask = new PluginModalWindowButton("Complete task");
+        this.taskIdField = new EditorTextField("Put task id here...");
+        this.fetchTaskButton = new PluginModalWindowButton("Fetch Task From Server");
+        this.completeTaskButton = new PluginModalWindowButton("Complete task");
 
         panel.add(taskIdField, BorderLayout.PAGE_START);
-        panel.add(fetchTask, BorderLayout.CENTER);
-        panel.add(completeTask, BorderLayout.AFTER_LAST_LINE);
+        panel.add(fetchTaskButton, BorderLayout.CENTER);
+        panel.add(completeTaskButton, BorderLayout.AFTER_LAST_LINE);
 
         popup.setMinimumSize(new Dimension(400, 100));
 
         return popup;
     }
 
+    public JPanel getPanel() {
+        return panel;
+    }
+
+    public EditorTextField getTaskIdField() {
+        return taskIdField;
+    }
+
+    public PluginModalWindowButton getFetchTaskButton() {
+        return fetchTaskButton;
+    }
+
+    public Component getCompleteTaskButton() {
+        return completeTaskButton;
+    }
 }
