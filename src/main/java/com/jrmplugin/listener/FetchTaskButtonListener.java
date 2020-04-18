@@ -1,11 +1,10 @@
 package com.jrmplugin.listener;
 
-import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.diagnostic.Logger;
-import com.jrmplugin.core.HttpDownloadTask;
+import com.jrmplugin.core.http.HttpDownloadTask;
 import com.jrmplugin.core.ProjectStoreComponent;
-import com.jrmplugin.core.UnzipArchiveTask;
+import com.jrmplugin.core.zip.UnzipArchiveTask;
 import com.jrmplugin.core.VirtualTreeRefreshTask;
 import com.jrmplugin.util.CoreUtil;
 

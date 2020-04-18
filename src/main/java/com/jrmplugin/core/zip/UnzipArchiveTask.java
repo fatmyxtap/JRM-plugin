@@ -1,4 +1,4 @@
-package com.jrmplugin.core;
+package com.jrmplugin.core.zip;
 
 import com.intellij.openapi.diagnostic.Logger;
 import net.lingala.zip4j.core.ZipFile;

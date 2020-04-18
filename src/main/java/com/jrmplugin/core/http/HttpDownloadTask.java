@@ -1,4 +1,4 @@
-package com.jrmplugin.core;
+package com.jrmplugin.core.http;
 
 import com.intellij.openapi.diagnostic.Logger;
 

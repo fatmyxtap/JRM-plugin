@@ -2,11 +2,13 @@ package com.jrmplugin.listener;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.diagnostic.Logger;
+import com.jrmplugin.core.http.HttpUploadTask;
 import com.jrmplugin.core.ProjectStoreComponent;
-import com.jrmplugin.core.ZipArchiveTask;
+import com.jrmplugin.core.zip.ZipArchiveTask;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.function.Supplier;
 
 public class CompleteTaskButtonListener implements MouseListener {
@@ -16,16 +18,19 @@ public class CompleteTaskButtonListener implements MouseListener {
     private final Supplier<String> taskIdFieldReader;
     private final ProjectStoreComponent projectStoreComponent;
     private final ZipArchiveTask zipArchiveTask;
+    private final HttpUploadTask httpUploadTask;
 
     public CompleteTaskButtonListener(AnActionEvent event, Supplier<String> taskIdFieldReader) {
         this.taskIdFieldReader = taskIdFieldReader;
         this.projectStoreComponent = new ProjectStoreComponent();
         this.zipArchiveTask = new ZipArchiveTask();
+        this.httpUploadTask = new HttpUploadTask();
     }
 
     public void actionPerformed(MouseEvent mouseEvent) {
         String taskSourcesLocation = projectStoreComponent.get(taskIdFieldReader.get());
-        zipArchiveTask.zip(taskSourcesLocation);
+        File zipToSend = zipArchiveTask.zip(taskSourcesLocation);
+        httpUploadTask.uploadFile(zipToSend, taskIdFieldReader.get());
     }
 
     @Override
