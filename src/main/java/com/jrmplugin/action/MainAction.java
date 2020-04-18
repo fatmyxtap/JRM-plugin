@@ -3,6 +3,7 @@ package com.jrmplugin.action;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.diagnostic.Logger;
+import com.jrmplugin.listener.CompleteTaskButtonListener;
 import com.jrmplugin.listener.FetchTaskButtonListener;
 import com.jrmplugin.ui.PluginMainPopupWindow;
 import com.jrmplugin.util.UiUtil;
@@ -28,6 +29,10 @@ public class MainAction extends AnAction {
         pluginMainPopupWindow
                 .getFetchTaskButton()
                 .addMouseListener(new FetchTaskButtonListener(e, pluginMainPopupWindow::getTaskId));
+
+        pluginMainPopupWindow
+                .getCompleteTaskButton()
+                .addMouseListener(new CompleteTaskButtonListener(e, pluginMainPopupWindow::getTaskId));
     }
 
     @Override

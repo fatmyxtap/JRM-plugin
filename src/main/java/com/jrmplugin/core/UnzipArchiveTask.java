@@ -3,6 +3,9 @@ package com.jrmplugin.core;
 import com.intellij.openapi.diagnostic.Logger;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.model.FileHeader;
+
+import java.io.File;
 
 public class UnzipArchiveTask {
 
@@ -14,14 +17,14 @@ public class UnzipArchiveTask {
         this.destinationDirectory = destinationDirectory;
     }
 
-    public boolean unzip(String source) {
+    public String unzip(String source) {
         try {
             ZipFile zipFile = new ZipFile(source);
             zipFile.extractAll(destinationDirectory);
-            return true;
+            return destinationDirectory + File.separator + ((FileHeader) zipFile.getFileHeaders().iterator().next()).getFileName();
         } catch (ZipException ex) {
             LOG.error("Can't unzip file: " + source);
-            return false;
+            return null;
         }
     }
 

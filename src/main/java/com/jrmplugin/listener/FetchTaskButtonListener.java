@@ -1,16 +1,17 @@
 package com.jrmplugin.listener;
 
+import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.vfs.LocalFileSystem;
 import com.jrmplugin.core.HttpDownloadTask;
+import com.jrmplugin.core.ProjectStoreComponent;
 import com.jrmplugin.core.UnzipArchiveTask;
+import com.jrmplugin.core.VirtualTreeRefreshTask;
 import com.jrmplugin.util.CoreUtil;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.util.Objects;
 import java.util.function.Supplier;
 
 import static com.jrmplugin.action.MainAction.HOST_TASKS_URL;
@@ -22,11 +23,15 @@ public class FetchTaskButtonListener implements MouseListener {
     private final Supplier<String> taskIdFieldReader;
     private final HttpDownloadTask httpDownloadTask;
     private final UnzipArchiveTask unzipArchiveTask;
+    private final VirtualTreeRefreshTask virtualTreeRefreshTask;
+    private final ProjectStoreComponent projectStoreComponent;
 
     public FetchTaskButtonListener(AnActionEvent event, Supplier<String> taskIdFieldReader) {
         this.taskIdFieldReader = taskIdFieldReader;
         this.httpDownloadTask = new HttpDownloadTask(CoreUtil.getProjectFolder(event));
         this.unzipArchiveTask = new UnzipArchiveTask(CoreUtil.getProjectFolder(event));
+        this.virtualTreeRefreshTask = new VirtualTreeRefreshTask();
+        this.projectStoreComponent = new ProjectStoreComponent();
     }
 
     public void actionPerformed(MouseEvent mouseEvent) {
@@ -38,11 +43,13 @@ public class FetchTaskButtonListener implements MouseListener {
         }
 
         // unzip downloaded task
-        boolean unzipped = unzipArchiveTask.unzip(archiveFileLocation);
-        if (unzipped) {
+        String unzippedLocation = unzipArchiveTask.unzip(archiveFileLocation);
+        if (unzippedLocation != null) {
             // refresh virtual file tree in intellij project
-            Objects.requireNonNull(LocalFileSystem.getInstance().refreshAndFindFileByPath(archiveFileLocation))
-                    .refresh(true, true);
+            virtualTreeRefreshTask.refresh(unzippedLocation);
+
+            // save unzipped folder location to the project store
+            projectStoreComponent.add(taskIdFieldReader.get(), unzippedLocation);
 
             // try to remove archive
             boolean archiveDeleted = new File(archiveFileLocation).delete();
@@ -54,7 +61,7 @@ public class FetchTaskButtonListener implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
-        actionPerformed(mouseEvent);
+        this.actionPerformed(mouseEvent);
     }
 
     @Override
