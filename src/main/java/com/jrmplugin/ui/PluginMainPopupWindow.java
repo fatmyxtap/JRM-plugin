@@ -13,7 +13,10 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
 
     private JPanel panel;
 
-    private EditorTextField taskIdField;
+    // this field is static,
+    // because we want to save state across different calls between plugin execution
+    private static EditorTextField taskIdField;
+
     private Component fetchTaskButton;
     private Component completeTaskButton;
 
@@ -37,7 +40,9 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
     public JBPopup createPopup() {
         JBPopup popup = super.createPopup();
 
-        this.taskIdField = new EditorTextField(defaultTaskIdFieldText);
+        if (taskIdField == null)
+            taskIdField = new EditorTextField(defaultTaskIdFieldText);
+
         this.fetchTaskButton = new PluginModalWindowButton(defaultFetchTaskButtonText);
         this.completeTaskButton = new PluginModalWindowButton(defaultCompleteTaskButtonText);
 
@@ -52,10 +57,6 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
 
     public JPanel getPanel() {
         return panel;
-    }
-
-    public EditorTextField getTaskIdField() {
-        return taskIdField;
     }
 
     public String getTaskId() {

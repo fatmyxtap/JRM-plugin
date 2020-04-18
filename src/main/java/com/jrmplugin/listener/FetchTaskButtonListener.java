@@ -2,6 +2,7 @@ package com.jrmplugin.listener;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.vfs.LocalFileSystem;
 import com.jrmplugin.core.HttpDownloadTask;
 import com.jrmplugin.core.UnzipArchiveTask;
 import com.jrmplugin.util.CoreUtil;
@@ -9,6 +10,7 @@ import com.jrmplugin.util.CoreUtil;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import static com.jrmplugin.action.MainAction.HOST_TASKS_URL;
@@ -37,15 +39,16 @@ public class FetchTaskButtonListener implements MouseListener {
 
         // unzip downloaded task
         boolean unzipped = unzipArchiveTask.unzip(archiveFileLocation);
-        if (!unzipped) {
-            LOG.error("Can't unzip file: " + archiveFileLocation);
-            throw new IllegalStateException("Can't unzip file: " + archiveFileLocation);
-        }
+        if (unzipped) {
+            // refresh virtual file tree in intellij project
+            Objects.requireNonNull(LocalFileSystem.getInstance().refreshAndFindFileByPath(archiveFileLocation))
+                    .refresh(true, true);
 
-        // try to remove archive
-        boolean archiveDeleted = new File(archiveFileLocation).delete();
-        if (!archiveDeleted) {
-            LOG.error("Can't delete archive: " + archiveFileLocation);
+            // try to remove archive
+            boolean archiveDeleted = new File(archiveFileLocation).delete();
+            if (!archiveDeleted) {
+                LOG.error("Can't delete archive: " + archiveFileLocation);
+            }
         }
     }
 
