@@ -17,7 +17,7 @@ public class ZipArchiveTask {
         try {
             String fileLocation = Files.newTemporaryFolder() + File.separator + UUID.randomUUID().toString() + ".zip";
             ZipFile zipFile = new ZipFile(fileLocation);
-            zipFile.createZipFile(new File(path), new ZipParameters());
+            zipFile.createZipFileFromFolder(new File(path), new ZipParameters(), false, 0);
             return zipFile.getFile();
         } catch (ZipException ex) {
             LOG.error("Can't zip file: " + path);
