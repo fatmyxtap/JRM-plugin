@@ -2,6 +2,8 @@ package com.jrmplugin.ui;
 
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.ui.EditorTextField;
+import com.intellij.ui.ScrollPaneFactory;
+import com.intellij.ui.components.JBTextArea;
 import com.intellij.ui.popup.ComponentPopupBuilderImpl;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +18,7 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
     // this field is static,
     // because we want to save state across different calls between plugin execution
     private static EditorTextField taskIdField;
+    private static JTextArea resultTextField;
 
     private Component fetchTaskButton;
     private Component completeTaskButton;
@@ -30,6 +33,7 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
 
         // default preferences
         setCancelOnClickOutside(true);
+        setCancelOnWindowDeactivation(false);
         setRequestFocus(true);
         setResizable(true);
         setMayBeParent(true);
@@ -40,17 +44,44 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
     public JBPopup createPopup() {
         JBPopup popup = super.createPopup();
 
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 2;
         if (taskIdField == null)
             taskIdField = new EditorTextField(defaultTaskIdFieldText);
+        panel.add(taskIdField, c);
 
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 1;
         this.fetchTaskButton = new PluginModalWindowButton(defaultFetchTaskButtonText);
-        this.completeTaskButton = new PluginModalWindowButton(defaultCompleteTaskButtonText);
+        this.fetchTaskButton.setPreferredSize(new Dimension(250, 40));
+        panel.add(fetchTaskButton, c);
 
-        panel.add(taskIdField, BorderLayout.PAGE_START);
-        panel.add(fetchTaskButton, BorderLayout.CENTER);
-        panel.add(completeTaskButton, BorderLayout.AFTER_LAST_LINE);
+        c.gridx = 1;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        this.completeTaskButton = new PluginModalWindowButton(defaultCompleteTaskButtonText);
+        this.completeTaskButton.setPreferredSize(new Dimension(200, 40));
+        panel.add(completeTaskButton, c);
+
+        c.gridx = 0;
+        c.gridy = 2;
+        c.gridwidth = 2;
+        if (resultTextField == null) {
+            resultTextField = new JBTextArea(7, 50);
+            resultTextField.setEditable(false);
+            resultTextField.setLineWrap(true);
+            resultTextField.setWrapStyleWord(true);
+        }
+        JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(resultTextField);
+        panel.add(scrollPane, c);
 
         popup.setMinimumSize(new Dimension(400, 100));
+        panel.setMinimumSize(new Dimension(400, 100));
 
         return popup;
     }
@@ -83,4 +114,9 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
     public Component getCompleteTaskButton() {
         return completeTaskButton;
     }
+
+    public JTextArea getResultTextField() {
+        return resultTextField;
+    }
+
 }

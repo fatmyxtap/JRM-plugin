@@ -14,7 +14,7 @@ public class UiUtil {
     }
 
     public static LayoutManager defaultLayout() {
-        return new BorderLayout();
+        return new GridBagLayout();
     }
 
 }

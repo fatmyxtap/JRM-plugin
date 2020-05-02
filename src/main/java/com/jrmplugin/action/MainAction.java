@@ -32,7 +32,7 @@ public class MainAction extends AnAction {
 
         pluginMainPopupWindow
                 .getCompleteTaskButton()
-                .addMouseListener(new CompleteTaskButtonListener(e, pluginMainPopupWindow::getTaskId));
+                .addMouseListener(new CompleteTaskButtonListener(e, pluginMainPopupWindow.getResultTextField(), pluginMainPopupWindow::getTaskId));
     }
 
     @Override
