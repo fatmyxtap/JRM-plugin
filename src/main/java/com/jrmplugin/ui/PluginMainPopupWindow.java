@@ -26,6 +26,7 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
     private final String defaultTaskIdFieldText = "Put task id here...";
     private final String defaultFetchTaskButtonText = "Fetch Task From Server";
     private final String defaultCompleteTaskButtonText = "Complete task";
+    private JProgressBar progressBar;
 
     public PluginMainPopupWindow(JPanel panel) {
         super(panel, null);
@@ -68,6 +69,12 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
         this.completeTaskButton.setPreferredSize(new Dimension(200, 40));
         panel.add(completeTaskButton, c);
 
+        this.progressBar = new JProgressBar();
+        this.progressBar.setIndeterminate(true);
+        this.progressBar.setToolTipText("Wait please, I am verifying your solution.");
+        this.progressBar.setPreferredSize(new Dimension(200, 15));
+        panel.add(progressBar, c);
+
         c.gridx = 0;
         c.gridy = 2;
         c.gridwidth = 2;
@@ -80,9 +87,10 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
         JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(resultTextField);
         panel.add(scrollPane, c);
 
-        popup.setMinimumSize(new Dimension(400, 100));
-        panel.setMinimumSize(new Dimension(400, 100));
+        popup.setMinimumSize(new Dimension(450, 100));
+        panel.setMinimumSize(new Dimension(450, 100));
 
+        setInProgress(false);
         return popup;
     }
 
@@ -117,6 +125,16 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
 
     public JTextArea getResultTextField() {
         return resultTextField;
+    }
+
+    public void setInProgress(boolean inProgress) {
+        if (inProgress) {
+            progressBar.setVisible(true);
+            completeTaskButton.setVisible(false);
+        } else {
+            progressBar.setVisible(false);
+            completeTaskButton.setVisible(true);
+        }
     }
 
 }
