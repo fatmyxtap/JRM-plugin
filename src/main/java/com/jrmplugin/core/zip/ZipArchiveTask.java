@@ -23,7 +23,7 @@ public class ZipArchiveTask {
             String fileLocation = org.assertj.core.util.Files.newTemporaryFolder() + File.separator + UUID.randomUUID().toString() + ".zip";
             ZipFile zipFile = new ZipFile(fileLocation);
 
-            Files.walkFileTree(Paths.get(path), new HashSet<>(), Integer.MAX_VALUE, new SimpleFileVisitor<>() {
+            Files.walkFileTree(Paths.get(path), new HashSet<>(), 2, new SimpleFileVisitor<>() {
                 @Override
                 public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
                     if (dir.getFileName().toString().contains("target")) {
