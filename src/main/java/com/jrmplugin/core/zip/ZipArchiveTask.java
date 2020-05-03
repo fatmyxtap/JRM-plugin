@@ -28,7 +28,7 @@ public class ZipArchiveTask {
                 public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
                     if (dir.getFileName().toString().contains("target")) {
                         FileUtils.moveDirectory(dir.toFile(), new File(targetDirectory));
-                        return FileVisitResult.SKIP_SUBTREE;
+                        return FileVisitResult.TERMINATE;
                     }
                     return FileVisitResult.CONTINUE;
                 }
