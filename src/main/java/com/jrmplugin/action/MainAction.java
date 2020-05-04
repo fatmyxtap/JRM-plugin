@@ -14,7 +14,16 @@ import java.util.Objects;
 public class MainAction extends AnAction {
 
     private static final Logger LOG = Logger.getInstance(MainAction.class);
-    public static final String HOST_TASKS_URL = "http://localhost:8081/tasks/";
+    public static final String HOST_TASKS_URL = initServerSide();
+
+    @NotNull
+    private static String initServerSide() {
+        String local = System.getenv("local");
+        if (local != null) {
+            return "http://localhost:8081/tasks/";
+        }
+        return "http://84.38.186.94:8081/tasks/";
+    }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
