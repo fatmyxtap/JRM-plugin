@@ -1,36 +1,42 @@
 package com.jrmplugin.ui;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.ui.EditorTextField;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.components.JBTextArea;
 import com.intellij.ui.popup.ComponentPopupBuilderImpl;
+import com.jrmplugin.exception.TaskIdIncorrectException;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.UUID;
 
+import static com.jrmplugin.exception.TaskIdIncorrectException.TASK_ID_HAS_NOT_CHANGED;
+import static com.jrmplugin.exception.TaskIdIncorrectException.TASK_ID_IS_NOT_UUID;
+
 public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
 
-    private JPanel panel;
+    private final JPanel panel;
+    private final Project project;
 
     // this field is static,
     // because we want to save state across different calls between plugin execution
     private static EditorTextField taskIdField;
     private static JTextArea resultTextField;
+    private static PluginModalWindowProcessableButton fetchTaskButton;
+    private static PluginModalWindowProcessableButton completeTaskButton;
 
-    private Component fetchTaskButton;
-    private Component completeTaskButton;
 
     private final String defaultTaskIdFieldText = "Put task id here...";
-    private final String defaultFetchTaskButtonText = "Fetch Task From Server";
-    private final String defaultCompleteTaskButtonText = "Complete task";
-    private JProgressBar progressBar;
+    private final String defaultFetchTaskButtonText = "Fetch Task";
+    private final String defaultCompleteTaskButtonText = "Complete Task";
 
-    public PluginMainPopupWindow(JPanel panel) {
+    public PluginMainPopupWindow(Project project, JPanel panel) {
         super(panel, null);
         this.panel = panel;
+        this.project = project;
 
         // default preferences
         setCancelOnClickOutside(true);
@@ -51,29 +57,28 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
         c.gridx = 0;
         c.gridy = 0;
         c.gridwidth = 2;
-        if (taskIdField == null)
+        if (taskIdField == null) {
             taskIdField = new EditorTextField(defaultTaskIdFieldText);
+        }
         panel.add(taskIdField, c);
 
         c.gridx = 0;
         c.gridy = 1;
         c.gridwidth = 1;
-        this.fetchTaskButton = new PluginModalWindowButton(defaultFetchTaskButtonText);
-        this.fetchTaskButton.setPreferredSize(new Dimension(250, 40));
+        if (fetchTaskButton == null) {
+            fetchTaskButton = new PluginModalWindowProcessableButton(defaultFetchTaskButtonText);
+        }
         panel.add(fetchTaskButton, c);
+        panel.add(fetchTaskButton.getProgressBar(), c);
 
         c.gridx = 1;
         c.gridy = 1;
         c.gridwidth = 1;
-        this.completeTaskButton = new PluginModalWindowButton(defaultCompleteTaskButtonText);
-        this.completeTaskButton.setPreferredSize(new Dimension(200, 40));
+        if (completeTaskButton == null) {
+            completeTaskButton = new PluginModalWindowProcessableButton(defaultCompleteTaskButtonText);
+        }
         panel.add(completeTaskButton, c);
-
-        this.progressBar = new JProgressBar();
-        this.progressBar.setIndeterminate(true);
-        this.progressBar.setToolTipText("Wait please, I am verifying your solution.");
-        this.progressBar.setPreferredSize(new Dimension(200, 15));
-        panel.add(progressBar, c);
+        panel.add(completeTaskButton.getProgressBar(), c);
 
         c.gridx = 0;
         c.gridy = 2;
@@ -87,10 +92,9 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
         JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(resultTextField);
         panel.add(scrollPane, c);
 
-        popup.setMinimumSize(new Dimension(450, 100));
-        panel.setMinimumSize(new Dimension(450, 100));
+        popup.setMinimumSize(new Dimension(400, 100));
+        panel.setMinimumSize(new Dimension(400, 100));
 
-        setInProgress(false);
         return popup;
     }
 
@@ -98,43 +102,37 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
         return panel;
     }
 
+    public Project getProject() {
+        return project;
+    }
+
     public String getTaskId() {
         String text = taskIdField.getText();
 
         if (defaultTaskIdFieldText.equals(text)) {
-            return null;
+            throw new TaskIdIncorrectException(TASK_ID_HAS_NOT_CHANGED);
         }
 
         try {
             // just to check that the value is right uuid
             UUID.fromString(text);
         } catch (IllegalArgumentException ex) {
-            return null;
+            throw new TaskIdIncorrectException(TASK_ID_IS_NOT_UUID, taskIdField.getText());
         }
 
         return text;
     }
 
-    public Component getFetchTaskButton() {
+    public PluginModalWindowProcessableButton getFetchTaskButton() {
         return fetchTaskButton;
     }
 
-    public Component getCompleteTaskButton() {
+    public PluginModalWindowProcessableButton getCompleteTaskButton() {
         return completeTaskButton;
     }
 
     public JTextArea getResultTextField() {
         return resultTextField;
-    }
-
-    public void setInProgress(boolean inProgress) {
-        if (inProgress) {
-            progressBar.setVisible(true);
-            completeTaskButton.setVisible(false);
-        } else {
-            progressBar.setVisible(false);
-            completeTaskButton.setVisible(true);
-        }
     }
 
 }

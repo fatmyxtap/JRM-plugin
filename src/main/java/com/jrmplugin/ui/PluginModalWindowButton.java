@@ -19,6 +19,7 @@ public class PluginModalWindowButton extends ColorButton {
 
         setText(text);
         setWidth72(this);
+        setPreferredSize(new Dimension(200, 40));
     }
 
 }

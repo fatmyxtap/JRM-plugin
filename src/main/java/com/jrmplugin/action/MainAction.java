@@ -22,14 +22,14 @@ public class MainAction extends AnAction {
         if (local != null) {
             return "http://localhost:8081/tasks/";
         }
-        return "http://84.38.186.94:8081/tasks/";
+        return "http://javaroadmap.ru:8081/tasks/";
     }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         LOG.info(String.format("Action (%s) has been started.", this.getClass().getName()));
 
-        PluginMainPopupWindow pluginMainPopupWindow = new PluginMainPopupWindow(UiUtil.createJPanel());
+        PluginMainPopupWindow pluginMainPopupWindow = new PluginMainPopupWindow(e.getProject(), UiUtil.createJPanel());
 
         pluginMainPopupWindow
                 .createPopup()
@@ -37,11 +37,12 @@ public class MainAction extends AnAction {
 
         pluginMainPopupWindow
                 .getFetchTaskButton()
-                .addMouseListener(new FetchTaskButtonListener(e, pluginMainPopupWindow::getTaskId));
+                .addMouseListener(new FetchTaskButtonListener(e, pluginMainPopupWindow));
 
         pluginMainPopupWindow
                 .getCompleteTaskButton()
-                .addMouseListener(new CompleteTaskButtonListener(e, pluginMainPopupWindow, pluginMainPopupWindow::getTaskId));
+                .addMouseListener(new CompleteTaskButtonListener(e, pluginMainPopupWindow));
+
     }
 
     @Override
