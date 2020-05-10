@@ -7,9 +7,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.UUID;
 
-import static org.assertj.core.util.Files.newTemporaryFolder;
 
 public class ZipArchiveTask {
 
@@ -37,7 +37,13 @@ public class ZipArchiveTask {
 
     @NotNull
     private String createTemporaryZipFile() {
-        return newTemporaryFolder() + File.separator + UUID.randomUUID().toString() + ".zip";
+        try {
+            return Files.createTempDirectory("tmp")
+                    .toAbsolutePath().toString()
+                    + File.separator + UUID.randomUUID().toString() + ".zip";
+        } catch (IOException e) {
+            throw new IllegalStateException();
+        }
     }
 
 }
