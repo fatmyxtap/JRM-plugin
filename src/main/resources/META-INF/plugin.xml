@@ -2,7 +2,7 @@
     <id>com.jrmplugin.jrmplugin</id>
     <name>JavaRoadMap</name>
     <vendor email="javaroadmap@gmail.com" url="http://javaroadmap.ru">Java Road Map</vendor>
-    <idea-version since-build="192"/>
+    <idea-version since-build="193"/>
 
     <description><![CDATA[
     Java Road Map Application.

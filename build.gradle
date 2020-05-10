@@ -9,11 +9,11 @@ repositories {
 }
 
 group 'com.jrmplugin'
-version '0.0.2-SNAPSHOT'
+version '0.0.3-SNAPSHOT'
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version '2019.2.1'
+    version '2020.1.1'
     updateSinceUntilBuild false
 }
 patchPluginXml {
