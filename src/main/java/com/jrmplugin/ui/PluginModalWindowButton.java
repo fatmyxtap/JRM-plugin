@@ -4,6 +4,7 @@ import com.intellij.ide.plugins.newui.ColorButton;
 import com.intellij.ui.JBColor;
 
 import java.awt.*;
+import java.awt.event.MouseListener;
 
 public class PluginModalWindowButton extends ColorButton {
 
@@ -22,4 +23,14 @@ public class PluginModalWindowButton extends ColorButton {
         setPreferredSize(new Dimension(200, 40));
     }
 
+    @Override
+    public synchronized void addMouseListener(MouseListener l) {
+        MouseListener[] mouseListeners = getMouseListeners();
+        for (MouseListener listener : mouseListeners) {
+            if (listener.getClass().equals(l.getClass())) {
+                return;
+            }
+        }
+        super.addMouseListener(l);
+    }
 }
