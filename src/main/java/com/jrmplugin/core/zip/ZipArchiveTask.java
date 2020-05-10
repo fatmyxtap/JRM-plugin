@@ -1,17 +1,15 @@
 package com.jrmplugin.core.zip;
 
 import com.intellij.openapi.diagnostic.Logger;
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.model.ZipParameters;
-import org.apache.commons.io.FileUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.HashSet;
 import java.util.UUID;
+
+import static org.assertj.core.util.Files.newTemporaryFolder;
 
 public class ZipArchiveTask {
 
@@ -19,32 +17,27 @@ public class ZipArchiveTask {
 
     public File zip(String path) {
         try {
-            String targetDirectory = org.assertj.core.util.Files.newTemporaryFolder().getAbsolutePath() + File.separator + UUID.randomUUID().toString();
-            String fileLocation = org.assertj.core.util.Files.newTemporaryFolder() + File.separator + UUID.randomUUID().toString() + ".zip";
-            ZipFile zipFile = new ZipFile(fileLocation);
-
-            Files.walkFileTree(Paths.get(path), new HashSet<>(), 2, new SimpleFileVisitor<>() {
-                @Override
-                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                    if (dir.getFileName().toString().contains("target")) {
-                        FileUtils.moveDirectory(dir.toFile(), new File(targetDirectory));
-                        return FileVisitResult.TERMINATE;
-                    }
-                    return FileVisitResult.CONTINUE;
-                }
-            });
-
-            zipFile.addFolder(path, new ZipParameters());
-
-            if (new File(targetDirectory).exists()) {
-                FileUtils.moveDirectory(new File(targetDirectory), new File(path + File.separator + "target"));
-            }
-
+            ZipFile zipFile = new ZipFile(createTemporaryZipFile());
+            zipFile.addFolder(new File(path), prepareZipParameters());
             return zipFile.getFile();
-        } catch (IOException | ZipException ex) {
+        } catch (IOException ex) {
             LOG.error("Can't zip file: " + path);
             return null;
         }
+    }
+
+    @NotNull
+    private ZipParameters prepareZipParameters() {
+        ZipParameters zipParameters = new ZipParameters();
+        zipParameters.setExcludeFileHandler(
+                file -> file.getName().contains("target")
+        );
+        return zipParameters;
+    }
+
+    @NotNull
+    private String createTemporaryZipFile() {
+        return newTemporaryFolder() + File.separator + UUID.randomUUID().toString() + ".zip";
     }
 
 }

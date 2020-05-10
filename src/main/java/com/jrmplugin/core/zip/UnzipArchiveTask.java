@@ -2,7 +2,7 @@ package com.jrmplugin.core.zip;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.jrmplugin.exception.UnzipArchiveTaskException;
-import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.FileHeader;
 
