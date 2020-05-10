@@ -1,11 +1,11 @@
 <idea-plugin>
     <id>com.jrmplugin.jrmplugin</id>
-    <name>Plugin display name here</name>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <name>JavaRoadMap</name>
+    <vendor email="javaroadmap@gmail.com" url="http://javaroadmap.ru">Java Road Map</vendor>
 
     <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
+    Java Road Map Application.
+    Learn enterprise things like Spring, Hibernate and so on in PRACTICE!
     ]]></description>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html

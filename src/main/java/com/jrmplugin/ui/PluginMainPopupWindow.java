@@ -4,8 +4,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.ui.EditorTextField;
 import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.ui.components.JBTextArea;
 import com.intellij.ui.popup.ComponentPopupBuilderImpl;
+import com.jrmplugin.core.SafeJTextArea;
 import com.jrmplugin.exception.TaskIdIncorrectException;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +24,7 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
     // this field is static,
     // because we want to save state across different calls between plugin execution
     private static EditorTextField taskIdField;
-    private static JTextArea resultTextField;
+    private static SafeJTextArea resultTextField;
     private static PluginModalWindowProcessableButton fetchTaskButton;
     private static PluginModalWindowProcessableButton completeTaskButton;
 
@@ -84,7 +84,7 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
         c.gridy = 2;
         c.gridwidth = 2;
         if (resultTextField == null) {
-            resultTextField = new JBTextArea(7, 50);
+            resultTextField = new SafeJTextArea(7, 50);
             resultTextField.setEditable(false);
             resultTextField.setLineWrap(true);
             resultTextField.setWrapStyleWord(true);
