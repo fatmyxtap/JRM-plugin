@@ -1,11 +1,17 @@
 plugins {
-    id 'org.jetbrains.intellij' version '0.4.18'
+    id("java")
+    id("org.jetbrains.kotlin.jvm") version "1.3.72"
+    id("org.jetbrains.intellij") version "0.4.21"
 }
+
+apply plugin: "kotlin"
+apply plugin: "org.jetbrains.intellij"
 
 repositories {
     flatDir {
         dirs 'lib'
     }
+    mavenCentral()
 }
 
 group 'com.jrmplugin'
@@ -14,6 +20,7 @@ version '0.0.3-SNAPSHOT'
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
     version '2020.1.1'
+    pluginName = 'JRM'
     updateSinceUntilBuild false
 }
 patchPluginXml {

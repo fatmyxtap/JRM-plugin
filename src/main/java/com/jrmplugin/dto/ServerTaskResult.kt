@@ -1,34 +1,28 @@
-package com.jrmplugin.dto;
+package com.jrmplugin.dto
 
-public class ServerTaskResult {
+class ServerTaskResult {
+    val status = Status.IN_PROGRESS
+    val message: String? = null
 
-    private Status status = Status.IN_PROGRESS;
-    private String message;
-
-    public enum Status {
+    enum class Status {
         /**
          * Tests failed with some response message
          */
         UNCOMPLETED,
+
         /**
          * Tests passed
          */
         COMPLETED,
+
         /**
          * Compilation error or build failure
          */
         FAILURE,
+
         /**
          * Tests in progress
          */
-        IN_PROGRESS,
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public String getMessage() {
-        return message;
+        IN_PROGRESS
     }
 }
