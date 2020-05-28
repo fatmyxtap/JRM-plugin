@@ -7,7 +7,6 @@ import com.jrmplugin.listener.CompleteTaskButtonListener
 import com.jrmplugin.listener.FetchTaskButtonListener
 import com.jrmplugin.ui.PluginMainPopupWindow
 import com.jrmplugin.util.UiUtil
-import java.util.*
 
 class MainAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
@@ -30,10 +29,10 @@ class MainAction : AnAction() {
         @JvmField
         val HOST_TASKS_URL = initServerSide()
         private fun initServerSide(): String {
-            val local = System.getenv("local")
-            return if (local != null) {
-                "http://localhost:8081/tasks/"
-            } else "http://javaroadmap.ru:8081/tasks/"
+            return when {
+                System.getenv("local") != null -> "http://localhost:8081/tasks/"
+                else -> "http://javaroadmap.ru:8081/tasks/"
+            }
         }
     }
 }

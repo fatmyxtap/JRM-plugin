@@ -52,8 +52,8 @@ class PluginMainPopupWindow(val project: Project, val panel: JPanel) : Component
         }
 
         with(createGrid(gridx = 1, gridy = 1, gridwidth = 1)) {
-            panel.add(fetchTaskButton, this)
-            panel.add(fetchTaskButton.progressBar, this)
+            panel.add(completeTaskButton, this)
+            panel.add(completeTaskButton.progressBar, this)
         }
 
         with(createGrid(gridx = 0, gridy = 2, gridwidth = 2)) {
