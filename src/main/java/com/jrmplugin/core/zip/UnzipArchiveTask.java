@@ -22,7 +22,7 @@ public class UnzipArchiveTask {
         try {
             ZipFile zipFile = new ZipFile(source);
             zipFile.extractAll(destinationDirectory);
-            return destinationDirectory + File.separator + ((FileHeader) zipFile.getFileHeaders().iterator().next()).getFileName();
+            return destinationDirectory + File.separator + ((FileHeader) zipFile.getFileHeaders().get(zipFile.getFileHeaders().size() - 1)).getFileName();
         } catch (ZipException ex) {
             throw new UnzipArchiveTaskException("Can't unzip file " + source + " to destination " + destinationDirectory);
         }
