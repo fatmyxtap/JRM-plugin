@@ -24,7 +24,7 @@ public class HttpUploadTask {
                 .build();
 
         CloseableHttpClient client = HttpClients.createDefault();
-        HttpPost httpPost = new HttpPost(MainAction.HOST_TASKS_URL);
+        HttpPost httpPost = new HttpPost(MainAction.CORE_PROPERTIES.getProperty("api.processingUrl"));
 
         httpPost.setEntity(httpEntity);
         httpPost.addHeader("taskId", taskId);

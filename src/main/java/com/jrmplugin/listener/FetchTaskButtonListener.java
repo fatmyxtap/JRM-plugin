@@ -11,7 +11,7 @@ import com.jrmplugin.util.CoreUtil;
 
 import java.io.File;
 
-import static com.jrmplugin.action.MainAction.HOST_TASKS_URL;
+import static com.jrmplugin.action.MainAction.CORE_PROPERTIES;
 
 public class FetchTaskButtonListener extends ProcessableMouseAdapter {
 
@@ -35,7 +35,8 @@ public class FetchTaskButtonListener extends ProcessableMouseAdapter {
     @Override
     protected void actionPerformed() {
         // make call to server to download a task archive
-        String archiveFileLocation = httpDownloadTask.download(HOST_TASKS_URL, pluginMainPopupWindow.getTaskId());
+        String archiveFileLocation = httpDownloadTask.download(
+                CORE_PROPERTIES.getProperty("api.binaryTaskUrl"), pluginMainPopupWindow.getTaskId());
 
         // unzip downloaded task
         String unzippedLocation = unzipArchiveTask.unzip(archiveFileLocation);
