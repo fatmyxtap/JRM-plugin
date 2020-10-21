@@ -32,7 +32,9 @@ public class CompleteTaskButtonListener extends ProcessableMouseAdapter {
     @Override
     protected void actionPerformed() {
         String taskSourcesLocation = projectStoreComponent.get(pluginMainPopupWindow.getTaskId());
+        System.out.println(taskSourcesLocation);
         File zipToSend = zipArchiveTask.zip(taskSourcesLocation);
+        System.out.println(zipToSend);
         String result = this.parseResult(
                 httpUploadTask.uploadFile(zipToSend, pluginMainPopupWindow.getTaskId())
         );

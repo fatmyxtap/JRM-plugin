@@ -9,20 +9,26 @@ import com.jrmplugin.ui.PluginMainPopupWindow;
 import com.jrmplugin.util.UiUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
+import java.util.Properties;
 
 public class MainAction extends AnAction {
 
     private static final Logger LOG = Logger.getInstance(MainAction.class);
-    public static final String HOST_TASKS_URL = initServerSide();
+    public static Properties CORE_PROPERTIES = initServerSide();
 
     @NotNull
-    private static String initServerSide() {
-        String local = System.getenv("local");
-        if (local != null) {
-            return "http://localhost:8081/tasks/";
+    private static Properties initServerSide() {
+        try (InputStream input = MainAction.class.getClassLoader().getResourceAsStream("config.properties")) {
+            Properties prop = new Properties();
+            // load a properties file
+            prop.load(input);
+            return prop;
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
         }
-        return "http://javaroadmap.ru:8081/tasks/";
     }
 
     @Override
