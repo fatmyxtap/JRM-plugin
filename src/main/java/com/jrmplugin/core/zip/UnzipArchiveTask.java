@@ -4,7 +4,6 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.jrmplugin.exception.UnzipArchiveTaskException;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
-import net.lingala.zip4j.model.FileHeader;
 
 import java.io.File;
 
@@ -22,10 +21,18 @@ public class UnzipArchiveTask {
         try {
             ZipFile zipFile = new ZipFile(source);
             zipFile.extractAll(destinationDirectory);
-            return destinationDirectory + File.separator + ((FileHeader) zipFile.getFileHeaders().get(zipFile.getFileHeaders().size() - 1)).getFileName();
+            return destinationDirectory + File.separator + getFileName(zipFile);
         } catch (ZipException ex) {
             throw new UnzipArchiveTaskException("Can't unzip file " + source + " to destination " + destinationDirectory);
         }
+    }
+
+    public String getFileName(ZipFile zipFile) throws ZipException {
+        return zipFile.getFileHeaders()
+                .stream()
+                .filter(f -> !f.getFileName().contains("src"))
+                .filter(f -> !f.getFileName().contains("iml"))
+                .findAny().get().getFileName();
     }
 
 }
