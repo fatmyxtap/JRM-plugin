@@ -32,6 +32,7 @@ public class UnzipArchiveTask {
                 .stream()
                 .filter(f -> !f.getFileName().contains("src"))
                 .filter(f -> !f.getFileName().contains("iml"))
+                .filter(f -> !f.getFileName().contains("pom.xml"))
                 .findAny().get().getFileName();
     }
 
