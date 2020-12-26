@@ -23,7 +23,6 @@ public class MainAction extends AnAction {
     private static Properties initServerSide() {
         try (InputStream input = MainAction.class.getClassLoader().getResourceAsStream("config.properties")) {
             Properties prop = new Properties();
-            // load a properties file
             prop.load(input);
             return prop;
         } catch (IOException ex) {

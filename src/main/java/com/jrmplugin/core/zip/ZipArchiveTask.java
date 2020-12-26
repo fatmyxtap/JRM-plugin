@@ -29,7 +29,7 @@ public class ZipArchiveTask {
     @NotNull
     private ZipParameters prepareZipParameters() {
         ZipParameters zipParameters = new ZipParameters();
-        zipParameters.setExcludeFileHandler(
+        zipParameters.setExcludeFileFilter(
                 file -> file.getName().contains("target")
         );
         return zipParameters;

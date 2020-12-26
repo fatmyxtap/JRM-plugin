@@ -42,7 +42,7 @@ public class FetchTaskButtonListener extends ProcessableMouseAdapter {
         String unzippedLocation = unzipArchiveTask.unzip(archiveFileLocation);
 
         // refresh virtual file tree in intellij project
-        virtualTreeRefreshTask.refresh(unzippedLocation);
+        virtualTreeRefreshTask.refresh(unzippedLocation, true);
 
         // save unzipped folder location to the project store
         projectStoreComponent.add(pluginMainPopupWindow.getTaskId(), unzippedLocation);

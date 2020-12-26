@@ -32,6 +32,10 @@ public class HttpDownloadTask {
 
         try {
             CloseableHttpResponse response = client.execute(httpGet);
+            if (response.getStatusLine().getStatusCode() != 200) {
+                LOG.error("Something wrong happened while downloading archive. Please try again or contact with administrator.");
+                throw new DownloadTaskFromServerException("Can't download task from server: " + taskId);
+            }
             BufferedInputStream bis = new BufferedInputStream(response.getEntity().getContent());
             verifyResponseWithZipFile(taskId, bis);
             this.writeToDisk(fullPathToFile, bis);

@@ -2,7 +2,6 @@ package com.jrmplugin.core.http;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.jrmplugin.action.MainAction;
-import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -19,7 +18,7 @@ public class HttpUploadTask {
     private static final Logger LOG = Logger.getInstance(HttpUploadTask.class);
 
     public String uploadFile(File zipToSend, String taskId) {
-        HttpEntity httpEntity = MultipartEntityBuilder.create()
+        var httpEntity = MultipartEntityBuilder.create()
                 .addBinaryBody("file", zipToSend)
                 .build();
 
@@ -29,7 +28,7 @@ public class HttpUploadTask {
 
         try {
             CloseableHttpResponse response = client.execute(httpPost);
-            HttpEntity responseEntity = response.getEntity();
+            var responseEntity = response.getEntity();
             String entity = EntityUtils.toString(responseEntity, StandardCharsets.UTF_8);
             LOG.info(entity);
             return entity;

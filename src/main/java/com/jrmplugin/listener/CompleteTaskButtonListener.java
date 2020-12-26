@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.jrmplugin.core.ProcessableMouseAdapter;
 import com.jrmplugin.core.ProjectStoreComponent;
+import com.jrmplugin.core.VirtualTreeRefreshTask;
 import com.jrmplugin.core.http.HttpUploadTask;
 import com.jrmplugin.core.zip.ZipArchiveTask;
 import com.jrmplugin.dto.ServerTaskResult;
@@ -19,6 +20,7 @@ public class CompleteTaskButtonListener extends ProcessableMouseAdapter {
     private final ProjectStoreComponent projectStoreComponent;
     private final ZipArchiveTask zipArchiveTask;
     private final HttpUploadTask httpUploadTask;
+    private final VirtualTreeRefreshTask virtualTreeRefreshTask;
 
     public CompleteTaskButtonListener(AnActionEvent event, PluginMainPopupWindow pluginMainPopupWindow) {
         super(pluginMainPopupWindow, pluginMainPopupWindow.getCompleteTaskButton());
@@ -27,14 +29,17 @@ public class CompleteTaskButtonListener extends ProcessableMouseAdapter {
         this.projectStoreComponent = new ProjectStoreComponent();
         this.zipArchiveTask = new ZipArchiveTask();
         this.httpUploadTask = new HttpUploadTask();
+        this.virtualTreeRefreshTask = new VirtualTreeRefreshTask();
     }
 
     @Override
     protected void actionPerformed() {
         String taskSourcesLocation = projectStoreComponent.get(pluginMainPopupWindow.getTaskId());
-        System.out.println(taskSourcesLocation);
+
+        // save unsaved documents in intellij project
+        virtualTreeRefreshTask.save();
+
         File zipToSend = zipArchiveTask.zip(taskSourcesLocation);
-        System.out.println(zipToSend);
         String result = this.parseResult(
                 httpUploadTask.uploadFile(zipToSend, pluginMainPopupWindow.getTaskId())
         );
