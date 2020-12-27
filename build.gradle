@@ -21,6 +21,14 @@ patchPluginXml {
     changeNotes """"""
 }
 
+// todo remove after will be ready one of fix:
+// https://youtrack.jetbrains.com/issue/KTIJ-782
+// https://youtrack.jetbrains.com/issue/IDEA-252693
+// https://youtrack.jetbrains.com/issue/KTIJ-145
+tasks.buildSearchableOptions {
+    enabled = false
+}
+
 dependencies {
     compile 'net.lingala.zip4j:zip4j:2.6.4'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.9.8'

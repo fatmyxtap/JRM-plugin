@@ -1,12 +1,19 @@
 <idea-plugin>
     <id>com.jrmplugin.jrmplugin</id>
     <name>JavaRoadMap</name>
-    <vendor email="javaroadmap@gmail.com" url="http://javaroadmap.ru">Java Road Map</vendor>
+    <vendor email="javaroadmapofficial@gmail.com" url="http://javaroadmap.ru">Java Road Map Official</vendor>
     <idea-version since-build="193"/>
 
     <description><![CDATA[
     Java Road Map Application.
     Learn enterprise things like Spring, Hibernate and so on in PRACTICE!
+
+    How to use plugin:
+    1. Open plugin window in the toolbar: JRM Application.
+    2. Fetch source code from official website: javaroadmap.ru.
+    3. Solve all tasks step by step, described in the official website.
+    4. Send your solution using plugin window and wait until task will be processed and results has been provided.
+    That's it.
     ]]></description>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
