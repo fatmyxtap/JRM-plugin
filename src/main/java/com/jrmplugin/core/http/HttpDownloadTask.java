@@ -38,7 +38,7 @@ public class HttpDownloadTask {
             }
             BufferedInputStream bis = new BufferedInputStream(response.getEntity().getContent());
             verifyResponseWithZipFile(taskId, bis);
-            this.writeToDisk(fullPathToFile, bis);
+            writeToDisk(fullPathToFile, bis);
             LOG.info("File successfully downloaded");
         } catch (IOException e) {
             throw new DownloadTaskFromServerException("Can't download task from server: " + taskId);

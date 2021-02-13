@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.ui.EditorTextField;
 import com.intellij.ui.ScrollPaneFactory;
+import com.intellij.ui.components.JBList;
 import com.intellij.ui.popup.ComponentPopupBuilderImpl;
 import com.jrmplugin.core.SafeJTextArea;
 import com.jrmplugin.exception.TaskIdIncorrectException;
@@ -29,9 +30,9 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
     private static PluginModalWindowProcessableButton completeTaskButton;
 
 
-    private final String defaultTaskIdFieldText = "Put task id here...";
-    private final String defaultFetchTaskButtonText = "Fetch Task";
-    private final String defaultCompleteTaskButtonText = "Complete Task";
+    private static final String defaultTaskIdFieldText = "Put task id here...";
+    private static final String defaultFetchTaskButtonText = "Fetch Task";
+    private static final String defaultCompleteTaskButtonText = "Complete Task";
 
     public PluginMainPopupWindow(Project project, JPanel panel) {
         super(panel, null);
@@ -44,6 +45,7 @@ public class PluginMainPopupWindow extends ComponentPopupBuilderImpl {
         setRequestFocus(true);
         setResizable(true);
         setMayBeParent(true);
+
     }
 
     @Override

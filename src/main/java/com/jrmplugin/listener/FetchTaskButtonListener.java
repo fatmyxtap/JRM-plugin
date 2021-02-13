@@ -1,17 +1,24 @@
 package com.jrmplugin.listener;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.components.ServiceManager;
 import com.jrmplugin.core.ProcessableMouseAdapter;
 import com.jrmplugin.core.ProjectStoreComponent;
 import com.jrmplugin.core.VirtualTreeRefreshTask;
+import com.jrmplugin.core.cache.TaskIdCache;
 import com.jrmplugin.core.http.HttpDownloadTask;
 import com.jrmplugin.core.zip.UnzipArchiveTask;
+import com.jrmplugin.dto.Task;
 import com.jrmplugin.ui.PluginMainPopupWindow;
 import com.jrmplugin.util.CoreUtil;
 
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.UUID;
 
 import static com.jrmplugin.action.MainAction.CORE_PROPERTIES;
+import static java.nio.file.Files.delete;
+import static java.nio.file.Paths.get;
 
 public class FetchTaskButtonListener extends ProcessableMouseAdapter {
 
@@ -21,6 +28,8 @@ public class FetchTaskButtonListener extends ProcessableMouseAdapter {
     private final UnzipArchiveTask unzipArchiveTask;
     private final VirtualTreeRefreshTask virtualTreeRefreshTask;
     private final ProjectStoreComponent projectStoreComponent;
+    TaskIdCache cache = ServiceManager.getService(TaskIdCache.class);
+
 
     public FetchTaskButtonListener(AnActionEvent event, PluginMainPopupWindow pluginMainPopupWindow) {
         super(pluginMainPopupWindow, pluginMainPopupWindow.getFetchTaskButton());
@@ -48,11 +57,12 @@ public class FetchTaskButtonListener extends ProcessableMouseAdapter {
         projectStoreComponent.add(pluginMainPopupWindow.getTaskId(), unzippedLocation);
 
         // try to remove archive
-        boolean archiveDeleted = new File(archiveFileLocation).delete();
-        if (!archiveDeleted) {
+        try {
+            delete(get(archiveFileLocation));
+        } catch (IOException e) {
             LOG.error("Can't delete archive: " + archiveFileLocation);
         }
-
+        cache.putNewTask(new Task(pluginMainPopupWindow.getTaskId(), unzippedLocation));
         pluginMainPopupWindow.getResultTextField().setText("Task successfully fetched as project " + unzippedLocation + ". Do it!");
     }
 

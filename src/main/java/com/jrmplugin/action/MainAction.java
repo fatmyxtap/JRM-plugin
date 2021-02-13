@@ -2,7 +2,9 @@ package com.jrmplugin.action;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
+import com.jrmplugin.core.cache.TaskIdCache;
 import com.jrmplugin.listener.CompleteTaskButtonListener;
 import com.jrmplugin.listener.FetchTaskButtonListener;
 import com.jrmplugin.ui.PluginMainPopupWindow;
