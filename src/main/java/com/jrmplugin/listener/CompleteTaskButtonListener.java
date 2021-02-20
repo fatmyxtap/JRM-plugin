@@ -2,9 +2,11 @@ package com.jrmplugin.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.components.ServiceManager;
 import com.jrmplugin.core.ProcessableMouseAdapter;
 import com.jrmplugin.core.ProjectStoreComponent;
 import com.jrmplugin.core.VirtualTreeRefreshTask;
+import com.jrmplugin.core.cache.TaskIdCache;
 import com.jrmplugin.core.http.HttpUploadTask;
 import com.jrmplugin.core.zip.ZipArchiveTask;
 import com.jrmplugin.dto.ServerTaskResult;
@@ -21,6 +23,8 @@ public class CompleteTaskButtonListener extends ProcessableMouseAdapter {
     private final ZipArchiveTask zipArchiveTask;
     private final HttpUploadTask httpUploadTask;
     private final VirtualTreeRefreshTask virtualTreeRefreshTask;
+    private final TaskIdCache taskCache = ServiceManager.getService(TaskIdCache.class);
+
 
     public CompleteTaskButtonListener(AnActionEvent event, PluginMainPopupWindow pluginMainPopupWindow) {
         super(pluginMainPopupWindow, pluginMainPopupWindow.getCompleteTaskButton());
@@ -34,7 +38,8 @@ public class CompleteTaskButtonListener extends ProcessableMouseAdapter {
 
     @Override
     protected void actionPerformed() {
-        String taskSourcesLocation = projectStoreComponent.get(pluginMainPopupWindow.getTaskId());
+
+        String taskSourcesLocation = taskCache.findById(pluginMainPopupWindow.getTaskId());
 
         // save unsaved documents in intellij project
         virtualTreeRefreshTask.save();

@@ -21,7 +21,8 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
+        <applicationService serviceImplementation="com.jrmplugin.core.cache.TaskIdCache"/>
+
     </extensions>
 
     <!-- Actions -->
@@ -31,4 +32,5 @@
             <add-to-group group-id="MainToolBar" relative-to-action="RunAnything" anchor="before"/>
         </action>
     </actions>
+
 </idea-plugin>
